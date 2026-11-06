@@ -1,0 +1,34 @@
+{
+  "pages": [
+    {"id": "welcome", "title": "Welcome", "file": "welcome.md"},
+    {"id": "folders", "title": "Folders, emulator and Kickstarts", "file": "folders.md", "pages": [
+      {"id": "locations", "title": "Folder locations", "file": "locations.md"},
+      {"id": "emulator", "title": "The emulator (Amiberry)", "file": "emulator.md"},
+      {"id": "kickstarts", "title": "Kickstart ROMs", "file": "kickstarts.md"}
+    ]},
+    {"id": "browser", "title": "Browser tab", "file": "browser.md"},
+    {"id": "builder", "title": "Builder tab", "file": "builder.md", "pages": [
+      {"id": "prepared", "title": "Prepared drives", "file": "prepared.md"},
+      {"id": "executables", "title": "Standalone executables", "file": "executables.md"}
+    ]},
+    {"id": "launch-screen", "title": "Launch screen", "file": "launch-screen.md"},
+    {"id": "downloader", "title": "Downloader tab", "file": "downloader.md", "pages": [
+      {"id": "filters", "title": "Download filters", "file": "filters.md"}
+    ]},
+    {"id": "hdcommander", "title": "HDCommander tab (experimental)", "file": "hdcommander.md", "pages": [
+      {"id": "hd-games", "title": "Installing games into an image", "file": "hd-games.md"},
+      {"id": "hd-boot", "title": "Making an image bootable", "file": "hd-boot.md"},
+      {"id": "hd-whdload", "title": "WHDLoad and BetterWB in an image", "file": "hd-whdload.md"},
+      {"id": "hd-sdcard", "title": "Writing an image to an SD card", "file": "hd-sdcard.md"}
+    ]},
+    {"id": "settings", "title": "Settings windows", "file": "settings.md", "pages": [
+      {"id": "settings-browser", "title": "Browser settings", "file": "settings-browser.md"},
+      {"id": "settings-builder", "title": "Builder settings", "file": "settings-builder.md"},
+      {"id": "settings-amiberry", "title": "Amiberry settings", "file": "settings-amiberry.md"}
+    ]},
+    {"id": "commandline", "title": "Command line", "file": "commandline.md"},
+    {"id": "troubleshooting", "title": "Troubleshooting", "file": "troubleshooting.md"},
+    {"id": "legal", "title": "Legal notice and your responsibility", "file": "legal.md"},
+    {"id": "about", "title": "About and credits", "file": "about.md"}
+  ]
+}

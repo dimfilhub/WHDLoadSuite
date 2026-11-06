@@ -1,0 +1,15 @@
+{
+  "_comment": "Per-game exceptions to the default `amiberry --autoload game.lha`, keyed by archive name without .lha. 'mode': 'drive' runs the prepared drive instead (needs the Prepare step). 'hardware' sets fields on the game's entry in Amiberry's WHDLoad database (for example z3_ram, in MB).",
+  "RocketAttack_v1.0": {
+    "mode": "drive",
+    "note": "The slave deletes a file in its own game folder, which fails on the read-only .lha mount (DOS error 214 on 'sound')."
+  },
+  "UpScope_v1.01_Arcadia": {
+    "mode": "drive",
+    "note": "Black screen under --autoload; runs from a prepared drive."
+  },
+  "SuperSillySkidmarks_v2.2_CD": {
+    "hardware": {"z3_ram": 16, "cpu_24bitaddressing": false},
+    "note": "Needs about 9 MB of expansion RAM; an A1200 has 8 MB, so WHDLoad stops with 'Can't allocate ExpMem'. The LowMem_CD variant needs no override."
+  }
+}

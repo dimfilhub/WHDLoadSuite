@@ -1,0 +1,3 @@
+pyinstaller==6.22.3
+pillow==13.0.0   # needed to turn images/icon.png (and .png icons in work/Icons) into .icns/.ico, and to show pictures on the launch screen
+amitools==0.8.1   # only needed for the HDCommander tab (writing into .hdf images)

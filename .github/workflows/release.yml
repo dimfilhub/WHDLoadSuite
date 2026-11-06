@@ -1,0 +1,105 @@
+name: Release
+
+# When a release is published: test the app on Windows, macOS and Linux, then attach one source package per OS
+# (the code and docs plus that OS's launcher; needs Python 3.10+) to that release.
+# Can also be run by hand (Actions tab) to try the build; the packages are then only workflow artifacts.
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            name: windows
+          - os: macos-latest
+            name: macos
+          - os: ubuntu-22.04
+            name: linux
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Work out the version
+        shell: bash
+        run: |
+          # Release builds use the release tag; manual runs use VERSION from gui.py
+          if [ "${{ github.event_name }}" = "release" ]; then
+            echo "TAG=${{ github.event.release.tag_name }}" >> "$GITHUB_ENV"
+          else
+            echo "TAG=v$(sed -n 's/^VERSION = "\(.*\)"/\1/p' gui.py)" >> "$GITHUB_ENV"
+          fi
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+
+      - name: Install Tk and a virtual display (Linux)
+        if: matrix.name == 'linux'
+        run: sudo apt-get update && sudo apt-get install -y python3-tk xvfb
+
+      - name: Install requirements
+        run: python -m pip install -r requirements.txt
+
+      - name: Test (Linux)
+        if: matrix.name == 'linux'
+        run: xvfb-run -a python -m unittest discover -s tests -t .
+
+      - name: Test
+        if: matrix.name != 'linux'
+        run: python -m unittest discover -s tests -t .
+
+      - name: Assemble the source package
+        shell: bash
+        run: |
+          pkg="WHDLoadSuite-$TAG-${{ matrix.name }}-source"
+          python - "$pkg" "${{ matrix.name }}" <<'PY'
+          import shutil, subprocess, sys
+          from pathlib import Path
+          pkg, osname = sys.argv[1:]
+          launcher = {"windows": "start_windows.bat", "macos": "start_macos.command", "linux": "start_linux.sh"}[osname]
+          out = Path("pkg") / pkg
+          # Everything tracked in git (code, docs and the empty folder skeleton), minus tests, CI files and the
+          # other OSes' launchers
+          files = subprocess.check_output(["git", "ls-files", "-z"], text=True).split("\0")
+          for f in filter(None, files):
+              if f.startswith(("tests/", ".github/")) or (f.startswith("start_") and f != launcher):
+                  continue
+              dest = out / f
+              dest.parent.mkdir(parents=True, exist_ok=True)
+              shutil.copy2(f, dest)   # keeps the launcher's executable bit
+          PY
+          echo "SRC=$pkg" >> "$GITHUB_ENV"
+
+      - name: Package (Windows)
+        if: matrix.name == 'windows'
+        shell: pwsh
+        run: Compress-Archive -Path "pkg/$env:SRC" -DestinationPath "$env:SRC.zip"
+
+      - name: Package (macOS)
+        if: matrix.name == 'macos'
+        run: ditto -c -k --sequesterRsrc --keepParent "pkg/$SRC" "$SRC.zip"
+
+      - name: Package (Linux)
+        if: matrix.name == 'linux'
+        run: tar -czf "$SRC.tar.gz" -C pkg "$SRC"
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: WHDLoadSuite-${{ matrix.name }}
+          path: WHDLoadSuite-*
+
+      - name: Attach to release
+        if: github.event_name == 'release'
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release upload "$TAG" WHDLoadSuite-* --clobber

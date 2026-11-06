@@ -1,0 +1,2 @@
+cd SYS:PortsOfCall
+WHDLoad PortsOfCall.slave PRELOAD

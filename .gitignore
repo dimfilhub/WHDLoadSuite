@@ -1,0 +1,47 @@
+# local environment / IDE
+.venv/
+.idea/
+.vscode/
+__pycache__/
+*.pyc
+.pytest_cache/
+.DS_Store
+
+# local settings written by the GUI (they hold absolute paths of this machine)
+.whdloadsuite.json
+
+# work folder: only the template and empty placeholder folders are tracked.
+# Game archives, prepared drives, executables, ROMs and WHDLoad itself stay local (see README).
+/work/*
+!/work/Template_WHDLoad/
+/work/Template_WHDLoad/C/*
+!/work/Template_WHDLoad/C/.gitkeep
+/work/Template_WHDLoad/Devs/Kickstarts/*
+!/work/Template_WHDLoad/Devs/Kickstarts/put-your-kickstart-files-here.txt
+!/work/downloads/
+/work/downloads/*
+!/work/downloads/.gitkeep
+!/work/Whdload/
+/work/Whdload/*
+!/work/Whdload/.gitkeep
+!/work/Executables/
+/work/Executables/*
+!/work/Executables/.gitkeep
+!/work/Icons/
+/work/Icons/*
+!/work/Icons/.gitkeep
+
+# emulator (Amiberry) and Kickstart ROMs stay local
+/emulator/*
+!/emulator/.gitkeep
+!/emulator/Floppies/
+/emulator/Floppies/*
+!/emulator/Floppies/.gitkeep
+!/emulator/Kickstarts/
+/emulator/Kickstarts/*
+!/emulator/Kickstarts/README.md
+
+# PyInstaller output
+build/
+dist/
+*.spec
